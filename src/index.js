@@ -1,11 +1,28 @@
-// index.js
 import http from 'http';
+import { getItems, postItem, deleteItem, changeItem, changeItemProperty } from './items.js';
 const hostname = '127.0.0.1';
 const port = 3000;
 
+// Create a server object and bind a callback function
+// to all request events
 const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Welcome to my REST API!');
+    const { url, method } = req;
+    console.log('url:', url, 'method:', method);
+    if (url === '/items' && method === 'GET') {
+        getItems(res);
+    } else if (url === '/items' && method === 'POST') {
+        postItem(req, res);
+    } else if (url === '/items' && method === 'DELETE') {
+        deleteItem(req, res);
+    } else if (url === '/items' && method === 'PUT') {
+        changeItem(req, res);
+    } else if (url === '/items' && method === 'PATCH') {
+        changeItemProperty(req, res);
+    } else {
+        // Generic not found response
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: '404', message: 'not found' }));
+    }
 });
 
 server.listen(port, hostname, () => {
