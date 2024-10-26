@@ -4,7 +4,7 @@ const items = [
     { id: 2, name: 'Item2' },
 ];
 
-// Utility function to handle request body
+// req body
 const getRequestBody = (req) => {
     return new Promise((resolve, reject) => {
         let body = [];
@@ -23,18 +23,18 @@ const getRequestBody = (req) => {
     });
 };
 
-// Utility function to send response
+// response
 const sendResponse = (res, statusCode, message) => {
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(message));
 };
 
-// GET items handler
+// GET
 const getItems = (res) => {
     sendResponse(res, 200, items);
 };
 
-// POST item handler
+// POST
 const postItem = async (req, res) => {
     try {
         const item = await getRequestBody(req);
@@ -47,7 +47,7 @@ const postItem = async (req, res) => {
     }
 };
 
-// DELETE item handler
+// DELETE
 const deleteItem = async (req, res) => {
     try {
         const item = await getRequestBody(req);
@@ -64,7 +64,7 @@ const deleteItem = async (req, res) => {
     }
 };
 
-// PUT/UPDATE item handler (replaces the entire item)
+// PUT
 const changeItem = async (req, res) => {
     try {
         const item = await getRequestBody(req);
@@ -81,14 +81,13 @@ const changeItem = async (req, res) => {
     }
 };
 
-// PATCH item property handler (updates a specific property)
+// PATCH
 const changeItemProperty = async (req, res) => {
     try {
         const item = await getRequestBody(req);
         const index = items.findIndex((element) => element.id === item.id);
 
         if (index !== -1) {
-            // Löysin mielenkiintoisen tavan 
             const propertyToUpdate = Object.keys(item).find(key => key !== 'id');
             if (propertyToUpdate) {
                 items[index][propertyToUpdate] = item[propertyToUpdate];
