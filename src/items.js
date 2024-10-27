@@ -1,7 +1,15 @@
-// Dummy mock data
+// test data
 const items = [
-    { id: 1, name: 'Item1' },
-    { id: 2, name: 'Item2' },
+    { id: 1, value: 1 },
+    { id: 2, value: 2 },
+    { id: 3, value: 3 },
+    { id: 4, value: 4 },
+    { id: 5, value: 5 },
+    { id: 6, value: 6 },
+    { id: 7, value: 7 },
+    { id: 8, value: 8 },
+    { id: 9, value: 9 },
+    { id: 10, value: 10 },
 ];
 
 // req body
@@ -103,4 +111,40 @@ const changeItemProperty = async (req, res) => {
     }
 };
 
+// Suurin
+const getMax = (res) => {
+    const max = items.reduce((acc, item) => (item.value > acc ? item.value : acc), 0);
+    sendResponse(res, 200, { result: max });
+};
+
+// Pienin
+const getMin = (res) => {
+    const min = items.reduce((acc, item) => (item.value < acc ? item.value : acc), 1);
+    sendResponse(res, 200, { result: min });
+};
+
+// Summa
+const getSum = (res) => {
+    const sum = items.reduce((acc, item) => acc + item.value, 0);
+    sendResponse(res, 200, { result: sum });
+};
+
+// Keskiarvo
+const getAverage = (res) => {
+    const sum = items.reduce((acc, item) => acc + item.value, 0);
+    const average = items.length > 0 ? sum / items.length : 0;
+    sendResponse(res, 200, { result: average });
+};
+
+// Mediaani
+const getMedian = (res) => {
+    const sortedItems = [...items].sort((a, b) => a.value - b.value);
+    const middle = Math.floor(sortedItems.length / 2);
+    const median = sortedItems.length % 2 === 0
+        ? (sortedItems[middle - 1].value + sortedItems[middle].value) / 2
+        : sortedItems[middle].value;
+    sendResponse(res, 200, { result: median });
+};
+
 export { getItems, postItem, deleteItem, changeItem, changeItemProperty };
+export { getMin, getMax, getSum, getAverage, getMedian };

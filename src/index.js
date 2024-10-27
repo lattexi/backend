@@ -1,5 +1,5 @@
 import http from 'http';
-import { getItems, postItem, deleteItem, changeItem, changeItemProperty } from './items.js';
+import { getItems, postItem, deleteItem, changeItem, changeItemProperty, getMin, getMax, getSum, getAverage, getMedian } from './items.js';
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -18,6 +18,16 @@ const server = http.createServer((req, res) => {
         changeItem(req, res);
     } else if (url === '/items' && method === 'PATCH') {
         changeItemProperty(req, res);
+    } else if (url === '/items/min' && method === 'GET') {
+        getMin(res);
+    } else if (url === '/items/max' && method === 'GET') {
+        getMax(res);
+    } else if (url === '/items/sum' && method === 'GET') {
+        getSum(res);
+    } else if (url === '/items/average' && method === 'GET') {
+        getAverage(res);
+    } else if (url === '/items/median' && method === 'GET') {
+        getMedian(res);
     } else {
         // Generic not found response
         res.writeHead(404, { 'Content-Type': 'application/json' });
