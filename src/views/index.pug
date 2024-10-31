@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title= title
+  body
+    h1= title
+    p= message
+    h2 Available API Endpoints
+    ul
+      li GET /api/media - List all media items
+      li GET /api/media/:id - Get a specific media item by ID
+      li POST /api/media - Add a new media item
+      li PUT /api/media/:id - Update an existing media item
+      li DELETE /api/media/:id - Delete a media item
+
+    h2 Example Data
+    each item in exampleData
+      h3= item.title
+      p ID: #{item.media_id}
+      p Filename: #{item.filename}
+      p Filesize: #{item.filesize} bytes
+      p Description: #{item.description || 'No description provided'}
+      p User ID: #{item.user_id}
+      p Media Type: #{item.media_type}
+      p Created At: #{item.created_at}
