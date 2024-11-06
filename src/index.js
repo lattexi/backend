@@ -10,7 +10,7 @@ app.set('views', 'src/views');
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.render('index', { title: 'Welcome', message: 'Welcome to the API!' });
+    res.send('/api for API documentation');
 });
 
 // Home page (client) as static html, css, js
