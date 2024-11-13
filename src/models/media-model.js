@@ -52,55 +52,43 @@ const mediaItems = [
     },
 ];
 
-const getItems = (res) => {
-    res.json(mediaItems);
+const fetchMediaItems = () => {
+    return mediaItems;
 };
 
-const postItem = (req, res) => {
-    console.log('post req body', req.body);
-    const newItem = req.body;
-    newItem.media_id = mediaItems[mediaItems.length - 1].media_id + 1;
+const fetchMediaItemById = (id) => {
+    const item = mediaItems.find((item) => item.media_id === id);
+    if (!item) {
+        return null;
+    }
+    return item;
+};
+
+const addMediaItem = (newItem) => {
+    newItem.media_id = mediaItems[mediaItems.length - 1].media_id + 1 || 1;
     mediaItems.push(newItem);
-    res.status(201).json({ message: 'Item added', id: newItem.id });
+    return newItem.media_id;
 };
 
-const getItemById = (req, res) => {
-    const id = parseInt(req.params.id);
+const changeItem = (id, updatedMediaItem) => {
     const item = mediaItems.find((item) => item.media_id === id);
-    if (item) {
-        if (req.query.format === 'plain') {
-            res.send(item.title);
-        } else {
-            res.json(item);
-        }
-    } else {
-        res.status(404).json({ message: 'Item not found' });
+    if (!item) {
+        return null;
     }
+    const index = mediaItems.indexOf(item);
+    mediaItems[index] = { ...item, ...updatedMediaItem };
+    return mediaItems[index];
 };
 
-const changeItem = (req, res) => {
-    const id = parseInt(req.params.id);
+const removeMediaItem = (id) => {
     const item = mediaItems.find((item) => item.media_id === id);
-    if (item) {
-        const index = mediaItems.indexOf(item);
-        mediaItems[index] = req.body;
-        mediaItems[index].media_id = id;
-        res.json({ message: 'Item changed', id: id });
-    } else {
-        res.status(404).json({ message: 'Item not found' });
+    if (!item) {
+        return null;
     }
+    const index = mediaItems.indexOf(item);
+    mediaItems.splice(index, 1);
+    return item;
 };
 
-const deleteItem = (req, res) => {
-    const id = parseInt(req.params.id);
-    const item = mediaItems.find((item) => item.media_id === id);
-    if (item) {
-        const index = mediaItems.indexOf(item);
-        mediaItems.splice(index, 1);
-        res.json({ message: 'Item deleted', id: id });
-    } else {
-        res.status(404).json({ message: 'Item not found' });
-    }
-};
-
-export { getItems, postItem, getItemById, changeItem, deleteItem, mediaItems };
+export { fetchMediaItems, fetchMediaItemById, addMediaItem, changeItem, removeMediaItem };
+export default mediaItems;

@@ -1,5 +1,8 @@
 import express from 'express';
-import { getItemById, getItems, mediaItems, changeItem, postItem, deleteItem } from './media.js';
+import mediaRouter from './routes/media-router.js';
+import mediaItems from './models/media-model.js';
+import userRouter from './routes/user-router.js';
+import users from './models/user-model.js';
 const hostname = '127.0.0.1';
 const port = 3000;
 const app = express();
@@ -9,44 +12,29 @@ app.set('views', 'src/views');
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('/api for API documentation');
-});
-
 // Home page (client) as static html, css, js
 app.use(express.static('public'));
 // Uploaded media files
-app.use('/media', express.static('media'));
+app.use('/uploads', express.static('uploads'));
 
-// Api documentation tms. with pug
+// Api documentation page rendered with pug
 app.get('/api', (req, res) => {
     res.render('index', {
-        title: 'API Documentation',
-        message: 'Welcome to my API!',
+        title: 'Media sharing REST API Documentation',
+        version: process.env.npm_package_version,
         exampleData: mediaItems,
     });
 });
 
 // Media resource endpoints
-app.get('/api/media', (req, res) => {
-    getItems(res);
-});
+app.use('/api/media', mediaRouter);
 
-app.get('/api/media/:id', (req, res) => {
-    getItemById(req, res);
-});
+// User resource endpoints
+app.use('/api/users', userRouter);
 
-app.post('/api/media', (req, res) => {
-    postItem(req, res);
-});
-
-app.put('/api/media/:id', (req, res) => {
-    changeItem(req, res);
-});
-
-app.delete('/api/media/:id', (req, res) => {
-    deleteItem(req, res);
-});
+// User resource endpoints
+// TODO: implement user resource
+//app.use('/api/users', userRouter);
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
