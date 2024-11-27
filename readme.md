@@ -30,3 +30,11 @@
 - Implemented PUT and DELETE endpoints
 - Added images to media folder with matching filenames to the mock data
 - Images avalaible at /media/filename
+
+
+# Database
+
+- Database structure in database/database.png
+- Created tables for likes, comments, tags and user levels
+- Inserted records in all tables
+- All sql queries can be found in database/create-db.sql

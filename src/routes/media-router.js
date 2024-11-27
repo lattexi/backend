@@ -1,19 +1,19 @@
-import express from 'express';
-import multer from 'multer';
-import { getItemById, getItems, postItem, putItem, deleteItem } from '../controllers/media-controller.js';
+import express from "express";
+import multer from "multer";
+import { getItemById, getItems, postItem, putItem, deleteItem } from "../controllers/media-controller.js";
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: "uploads/" });
 
 const mediaRouter = express.Router();
 
-mediaRouter.route('/')
+mediaRouter.route("/")
     .get(getItems)
-    .post(upload.single('file'), postItem);
+    .post(upload.single("file"), postItem);
 
 mediaRouter
-    .route('/:id')
+    .route("/:id")
     .get(getItemById)
-    .put(upload.single('file'), putItem)
+    .put(upload.single("file"), putItem)
     .delete(deleteItem);
 
 export default mediaRouter;
