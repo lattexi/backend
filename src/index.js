@@ -1,8 +1,6 @@
 import express from "express";
 import mediaRouter from "./routes/media-router.js";
 import mediaItems from "./models/media-model.js";
-import userRouter from "./routes/user-router.js";
-import users from "./models/user-model.js";
 const hostname = "127.0.0.1";
 const port = 3000;
 const app = express();
@@ -29,8 +27,6 @@ app.get("/api", (req, res) => {
 // Media resource endpoints
 app.use("/api/media", mediaRouter);
 
-// User resource endpoints
-app.use("/api/users", userRouter);
 
 // User resource endpoints
 // TODO: implement user resource
