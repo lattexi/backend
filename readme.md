@@ -32,9 +32,14 @@
 - Images avalaible at /media/filename
 
 
-# Database
+# Database A
 
 - Database structure in database/database.png
 - Created tables for likes, comments, tags and user levels
 - Inserted records in all tables
 - All sql queries can be found in database/create-db.sql
+
+# Database B
+
+- Planned and created project database
+- Created current sql dump from the database
