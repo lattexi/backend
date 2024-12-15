@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS ReKO;
-CREATE DATABASE ReKO;
-USE ReKo;
+DROP DATABASE IF EXISTS reko;
+CREATE DATABASE reko;
+USE reko;
 
 CREATE TABLE Users (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -13,7 +13,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Categories (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL
+  name VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE Items (
@@ -27,10 +27,11 @@ CREATE TABLE Items (
   FOREIGN KEY (category_id) REFERENCES Categories(id)
 );
 
-CREATE TABLE CategoryOfTheDay (
-  date DATE NOT NULL PRIMARY KEY,
-  category_id INT NOT NULL,
-  FOREIGN KEY (category_id) REFERENCES Categories(id)
+CREATE TABLE FeaturedItems (
+  item_id INT NOT NULL PRIMARY KEY,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Orders (
@@ -52,4 +53,3 @@ CREATE TABLE OrderItems (
   FOREIGN KEY (order_id) REFERENCES Orders(id),
   FOREIGN KEY (item_id) REFERENCES Items(id)
 );
-
