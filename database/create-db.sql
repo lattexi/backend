@@ -53,8 +53,8 @@ CREATE TABLE Tags (
   tag_name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO Users VALUES (260, 'VCHar', 'secret123', 'vchar@example.com', 1, null);
-INSERT INTO Users VALUES (305, 'Donatello', 'secret234', 'dona@example.com', 1, null);
+INSERT INTO Users VALUES (260, 'VCHar', 'secret123', 'vchar@example.com', 1, CURRENT_TIMESTAMP);
+INSERT INTO Users VALUES (305, 'Donatello', 'secret234', 'dona@example.com', 1, CURRENT_TIMESTAMP);
 
 INSERT INTO MediaItems (filename, filesize, title, description, user_id, media_type) 
   VALUES ('ffd8.jpg', 887574, 'Favorite drink', null, 305, 'image/jpeg'),

@@ -48,10 +48,17 @@ const putItem = async (req, res) => {
         filename: req.file.filename,
         filesize: req.file.size,
         media_type: req.file.mimetype,
-        updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
     };
     const id = parseInt(req.params.id);
-    const item = await changeItem(id, updatedMediaItem);
+    const item = await fetchMediaItemById(id);
+    if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+    }
+    if (item.user_id !== req.user.user_id) {
+        return res.status(403).json({ message: 'Access denied' });
+    }
+    const changeItem = await changeItem(id, updatedMediaItem);
     if (item) {
         res.json({ message: 'Item updated', item: item });
     } else {
@@ -61,11 +68,18 @@ const putItem = async (req, res) => {
 
 const deleteItem = async (req, res) => {
     const id = parseInt(req.params.id);
-    const item = await removeMediaItem(id);
-    if (item) {
-        res.json({ message: 'Item deleted', item: item });
+    const item = await fetchMediaItemById(id);
+    if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+    }
+    if (item.user_id !== req.user.user_id) {
+        return res.status(403).json({ message: 'Access denied' });
+    }
+    const success = await removeMediaItem(id);
+    if (success) {
+        res.json({ message: 'Item deleted' });
     } else {
-        res.status(404).json({ message: 'Item not found' });
+        res.status(500).json({ message: 'Error deleting item' });
     }
 };
 

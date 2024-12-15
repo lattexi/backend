@@ -1,4 +1,6 @@
 import express from 'express';
+import 'dotenv/config';
+import authRouter from './routes/auth-router.js';
 import mediaRouter from './routes/media-router.js';
 import { mediaItems } from './models/media-model.js';
 import userRouter from './routes/user-router.js';
@@ -25,6 +27,8 @@ app.get('/api', (req, res) => {
         exampleData: mediaItems,
     });
 });
+
+app.use('/api/auth', authRouter);
 
 // Media resource endpoints
 app.use('/api/media', mediaRouter);

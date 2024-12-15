@@ -1,4 +1,5 @@
 import pool from '../utils/db.js';
+import bcrypt from 'bcrypt';
 
 const fetchUsers = async () => {
     const [rows] = await pool.query('SELECT * FROM users');
@@ -10,9 +11,20 @@ const fetchUserById = async (id) => {
     return rows[0] || null;
 };
 
-const addUser = async (newUser) => {
-    const [result] = await pool.query('INSERT INTO users SET ?', newUser);
-    return result.insertId;
+const fetchUserByEmail = async (email) => {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+    console.log(rows[0]);
+    return rows[0] || null;
+};
+
+const addUser = async (user) => {
+    if (!user.password) {
+        console.log('missing fields');
+    }
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const params = [user.username, hashedPassword, user.email, user.user_level_id];
+    const [result] = await pool.query('INSERT INTO Users (username, password, email, user_level_id) VALUES (?, ?, ?, ?)', params);
+    return result;
 };
 
 const changeUser = async (id, updatedUser) => {
@@ -28,4 +40,4 @@ const removeUser = async (id) => {
     return result.affectedRows > 0;
 };
 
-export { fetchUsers, fetchUserById, addUser, changeUser, removeUser };
+export { fetchUsers, fetchUserById, fetchUserByEmail, addUser, changeUser, removeUser };

@@ -12,10 +12,14 @@ const getUsers = async (req, res) => {
 const postUser = async (req, res) => {
     try {
         console.log('post req body', req.body);
+        const password = req.body.password;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = {
             username: req.body.username,
             email: req.body.email,
-            created_at: new Date().toISOString(),
+            password: hashedPassword,
+            created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
         };
         const id = await addUser(newUser);
         if (!id) {
@@ -47,9 +51,12 @@ const putUser = async (req, res) => {
         const updatedUser = {
             username: req.body.username,
             email: req.body.email,
-            updated_at: new Date().toISOString(),
+            updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
         };
         const id = parseInt(req.params.id);
+        if (req.user.user_id !== id) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
         const user = await changeUser(id, updatedUser);
         if (user) {
             res.json({ message: 'User updated', user: user });
@@ -62,15 +69,14 @@ const putUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-    try {
-        const id = parseInt(req.params.id);
-        const user = await removeUser(id);
-        if (user) {
-            res.json({ message: 'User deleted', user: user });
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } catch (error) {
+    const id = parseInt(req.params.id);
+    if (req.user.user_id !== id) {
+        return res.status(403).json({ message: 'Access denied' });
+    }
+    const success = await removeUser(id);
+    if (success) {
+        res.json({ message: 'User deleted' });
+    } else {
         res.status(500).json({ message: 'Error deleting user' });
     }
 };

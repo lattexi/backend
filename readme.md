@@ -62,3 +62,6 @@
     - POST /api/likes - get all likes
     - DELETE /api/likes/:id - get like by id
 - Implemented file upload with multer
+
+# Authentication
+
