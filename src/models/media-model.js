@@ -1,94 +1,33 @@
-// Dummy mock data
-const mediaItems = [
-    {
-        media_id: 9632,
-        filename: 'ffd8.jpg',
-        filesize: 887574,
-        title: 'Favorite drink',
-        description: '',
-        user_id: 1606,
-        media_type: 'image/jpeg',
-        created_at: '2023-10-16T19:00:09.000Z',
-    },
-    {
-        media_id: 9626,
-        filename: 'dbbd.jpg',
-        filesize: 60703,
-        title: 'Miika',
-        description: 'My Photo',
-        user_id: 3671,
-        media_type: 'image/jpeg',
-        created_at: '2023-10-13T12:14:26.000Z',
-    },
-    {
-        media_id: 9625,
-        filename: 'cat2.png',
-        filesize: 30635,
-        title: 'Aksux',
-        description: 'friends',
-        user_id: 260,
-        media_type: 'image/jpeg',
-        created_at: '2023-10-12T20:03:08.000Z',
-    },
-    {
-        media_id: 9592,
-        filename: 'f504.jpg',
-        filesize: 48975,
-        title: 'Desert',
-        description: '',
-        user_id: 3609,
-        media_type: 'image/jpeg',
-        created_at: '2023-10-12T06:59:05.000Z',
-    },
-    {
-        media_id: 9590,
-        filename: '60ac.jpg',
-        filesize: 23829,
-        title: 'Basement',
-        description: 'Light setup in basement',
-        user_id: 305,
-        media_type: 'image/jpeg',
-        created_at: '2023-10-12T06:56:41.000Z',
-    },
-];
+import pool from '../utils/db.js';
 
-const fetchMediaItems = () => {
-    return mediaItems;
+const fetchMediaItems = async () => {
+    const [rows] = await pool.query('SELECT * FROM mediaItems');
+    return rows;
 };
 
-const fetchMediaItemById = (id) => {
-    const item = mediaItems.find((item) => item.media_id === id);
-    if (!item) {
+const fetchMediaItemById = async (id) => {
+    const [rows] = await pool.query('SELECT * FROM mediaItems WHERE media_id = ?', [id]);
+    return rows[0] || null;
+};
+
+const addMediaItem = async (newItem) => {
+    const [result] = await pool.query('INSERT INTO mediaItems SET ?', newItem);
+    return result.insertId;
+};
+
+const changeItem = async (id, updatedMediaItem) => {
+    const [result] = await pool.query('UPDATE mediaItems SET ? WHERE media_id = ?', [updatedMediaItem, id]);
+    if (result.affectedRows === 0) {
         return null;
     }
-    return item;
+    return fetchMediaItemById(id);
 };
 
-const addMediaItem = (newItem) => {
-    newItem.media_id = mediaItems[mediaItems.length - 1].media_id + 1 || 1;
-    mediaItems.push(newItem);
-    return newItem.media_id;
+const removeMediaItem = async (id) => {
+    const [result] = await pool.query('DELETE FROM mediaItems WHERE media_id = ?', [id]);
+    return result.affectedRows > 0;
 };
 
-const changeItem = (id, updatedMediaItem) => {
-    const item = mediaItems.find((item) => item.media_id === id);
-    if (!item) {
-        return null;
-    }
-    const index = mediaItems.indexOf(item);
-    mediaItems[index] = { ...item, ...updatedMediaItem };
-    return mediaItems[index];
-};
+const mediaItems = fetchMediaItems();
 
-const removeMediaItem = (id) => {
-    const item = mediaItems.find((item) => item.media_id === id);
-    if (!item) {
-        return null;
-    }
-    const index = mediaItems.indexOf(item);
-    mediaItems.splice(index, 1);
-    return item;
-};
-
-export { fetchMediaItems, fetchMediaItemById, addMediaItem, changeItem, removeMediaItem };
-export default mediaItems;
+export { fetchMediaItems, fetchMediaItemById, addMediaItem, changeItem, removeMediaItem, mediaItems };

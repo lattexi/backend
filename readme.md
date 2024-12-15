@@ -43,3 +43,22 @@
 
 - Planned and created project database
 - Created current sql dump from the database
+
+# Express MVC and database
+
+- Connected database and created sql statements to models for getting data from the database
+- Implemented endpoints for:
+    - GET /api/media - list all media items
+    - GET /api/media/:id - get media item by id
+    - PUT /api/media/:id - update media item
+    - DELETE /api/media/:id - delete media item
+    - GET /api/users - list all users
+    - GET /api/users/:id - get user by id
+    - POST /api/users - add new user
+    - PUT /api/users/:id - update user
+    - DELETE /api/users/:id - delete user
+    - GET /api/likes/media/:id - get likes for media
+    - GET /api/likes/user/:id - get likes for user
+    - POST /api/likes - get all likes
+    - DELETE /api/likes/:id - get like by id
+- Implemented file upload with multer
