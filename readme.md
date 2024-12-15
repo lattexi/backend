@@ -70,3 +70,8 @@
     - PUT /api/media/:id - only file owner can update media items
     - DELETE /api/media/:id - only file owner can delete media item
     - PUT /api/users/ - users can update only their own user info
+
+# Validation
+
+- Implemented error handling middleware
+- Implemented server side validation for all routes
