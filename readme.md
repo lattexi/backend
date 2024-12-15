@@ -65,3 +65,8 @@
 
 # Authentication
 
+- Implemented login endpoint
+- Implemented authentication for routes
+    - PUT /api/media/:id - only file owner can update media items
+    - DELETE /api/media/:id - only file owner can delete media item
+    - PUT /api/users/ - users can update only their own user info
