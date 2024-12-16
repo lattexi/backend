@@ -25,14 +25,8 @@ app.use(express.static('public'));
 // Uploaded media files
 app.use('/uploads', express.static('uploads'));
 
-// Api documentation page rendered with pug
-app.get('/api', (req, res) => {
-    res.render('index', {
-        title: 'Media sharing REST API Documentation',
-        version: process.env.npm_package_version,
-        exampleData: mediaItems,
-    });
-});
+// Documentation website by Apidoc
+// app.use('/api', express.static('doc'));
 
 app.use('/api', apiLimiter);
 
