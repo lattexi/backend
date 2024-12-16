@@ -3,7 +3,7 @@ import multer from 'multer';
 import { body, param } from 'express-validator';
 import { getItemById, getItems, postItem, putItem, deleteItem } from '../controllers/media-controller.js';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
-import { validate } from '../middleware/validate.js'; // Custom middleware to handle validation results
+import { validationErrorHandler } from '../middleware/error-handling.js';
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -18,36 +18,36 @@ mediaRouter.route('/')
             body('description').isString().trim().optional(),
             body('tags').isArray().optional(),
         ],
-        validate,
+        validationErrorHandler,
         postItem
     );
 
 mediaRouter.route('/:id')
     .get(
         [
-            param('id').isMongoId().withMessage('Invalid ID format'),
+            param('id').isInt().withMessage('Invalid ID format'),
         ],
-        validate,
+        validationErrorHandler,
         getItemById
     )
     .put(
         authenticateToken,
         upload.single('file'),
         [
-            param('id').isMongoId().withMessage('Invalid ID format'),
+            param('id').isInt().withMessage('Invalid ID format'),
             body('title').isString().trim().notEmpty().withMessage('Title is required'),
             body('description').isString().trim().optional(),
             body('tags').isArray().optional(),
         ],
-        validate,
+        validationErrorHandler,
         putItem
     )
     .delete(
         authenticateToken,
         [
-            param('id').isMongoId().withMessage('Invalid ID format'),
+            param('id').isInt().withMessage('Invalid ID format'),
         ],
-        validate,
+        validationErrorHandler,
         deleteItem
     );
 

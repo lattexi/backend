@@ -1,23 +1,41 @@
+import { validationResult } from 'express-validator';
+
+const customError = (message, status, errors) => {
+    const error = new Error(message);
+    error.status = status || 500;
+    if (errors) {
+        error.errors = errors;
+    }
+    return error;
+};
+
+const validationErrorHandler = (req, res, next) => {
+    const errors = validationResult(req, { strictParams: ['body'] });
+    if (!errors.isEmpty()) {
+        const validationErrors = errors.array({ onlyFirstError: true }).map((error) => {
+            return { field: error.path, msg: error.msg };
+        });
+        return next(customError('Invalid input data', 400, validationErrors));
+    }
+    next();
+};
+
+const notFoundHandler = (req, res, next) => {
+    const error = new Error(`Not Found - ${req.originalUrl}`);
+    error.status = 404;
+    return next(error);
+};
+
 const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
-
-    if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            message: 'Validation Error',
-            errors: err.errors
-        });
-    }
-
-    if (err.name === 'UnauthorizedError') {
-        return res.status(401).json({
-            message: 'Authentication Error',
-            error: err.message
-        });
-    }
-
-    res.status(err.status || 500).json({
-        message: err.message || 'Internal Server Error'
+    console.error('errorHandler: ', err.message);
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message,
+            status: err.status || 500,
+            errors: err.errors,
+        },
     });
 };
 
-export default errorHandler;
+export { notFoundHandler, errorHandler, customError, validationErrorHandler };

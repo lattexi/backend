@@ -5,6 +5,7 @@ import mediaRouter from './routes/media-router.js';
 import { mediaItems } from './models/media-model.js';
 import userRouter from './routes/user-router.js';
 import likesRouter from './routes/likes-router.js';
+import { errorHandler, notFoundHandler } from './middleware/error-handling.js';
 const hostname = '127.0.0.1';
 const port = 3000;
 const app = express();
@@ -41,3 +42,7 @@ app.use('/api/likes', likesRouter);
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+app.use(notFoundHandler);
+
+app.use(errorHandler);
