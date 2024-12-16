@@ -31,9 +31,8 @@ const errorHandler = (err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
         error: {
-            message: err.message,
+            message: 'Error occurred',
             status: err.status || 500,
-            errors: err.errors,
         },
     });
 };

@@ -75,3 +75,11 @@
 
 - Implemented error handling middleware
 - Implemented server side validation for all routes
+
+# Security
+
+- Already implemented password hashing when creating register endpoint
+- Implemented rate limiters for
+    - api (100 calls per 15min)
+    - upload (10 uploads per 1h)
+    - auth (10 login/register attempts per 1h)
