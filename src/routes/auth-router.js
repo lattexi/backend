@@ -5,8 +5,16 @@ import { body } from 'express-validator';
 
 const authRouter = express.Router();
 
-
 authRouter.route('/register')
+    .post(
+        [
+            body('email').isEmail().withMessage('Enter a valid email address'),
+            body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+            body('username').isString().trim().notEmpty().withMessage('Username is required')
+        ],
+        validationErrorHandler,
+        registerUser
+    )
     /**
     * @api {post} /register Register a new user
     * @apiName RegisterUser
@@ -19,23 +27,27 @@ authRouter.route('/register')
     *
     * @apiSuccess {String} message Success message
     * @apiSuccess {Number} id ID of the newly registered user
+    * @apiSuccessExample {json} Success-Response:
+    *    HTTP/1.1 201 Created
+    *   {
+    *    "message": "User registered",
+    *    "id": 1
+    *   }
     *
     * @apiError {Object} error Error object
     * @apiError {String} error.message Error message
     * @apiError {Number} error.status HTTP status code
-    */
+    */;
+
+authRouter.route('/login')
     .post(
         [
             body('email').isEmail().withMessage('Enter a valid email address'),
-            body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-            body('username').isString().trim().notEmpty().withMessage('Username is required')
+            body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
         ],
         validationErrorHandler,
-        registerUser);
-
-
-
-authRouter.route('/login')
+        loginUser
+    )
     /**
      * @api {post} /login Authenticate a user
      * @apiName LoginUser
@@ -47,17 +59,16 @@ authRouter.route('/login')
      *
      * @apiSuccess {String} message Success message
      * @apiSuccess {String} token JWT authentication token
+     * @apiSuccessExample {json} Success-Response:
+     *    HTTP/1.1 200 OK
+     *   {
+     *    "message": "Login successful",
+     *    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+     *   }
      *
      * @apiError {Object} error Error object
      * @apiError {String} error.message Error message
      * @apiError {Number} error.status HTTP status code
-     */
-    .post(
-        [
-            body('email').isEmail().withMessage('Enter a valid email address'),
-            body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-        ],
-        validationErrorHandler,
-        loginUser);
+     */;
 
 export default authRouter;

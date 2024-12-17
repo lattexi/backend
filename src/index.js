@@ -1,9 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
-import cors from 'cors';
 import authRouter from './routes/auth-router.js';
 import mediaRouter from './routes/media-router.js';
-import { mediaItems } from './models/media-model.js';
 import userRouter from './routes/user-router.js';
 import likesRouter from './routes/likes-router.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handling.js';
@@ -18,15 +16,13 @@ app.set('views', 'src/views');
 
 app.use(express.json());
 
-app.use(cors);
-
 // Home page (client) as static html, css, js
 app.use(express.static('public'));
 // Uploaded media files
 app.use('/uploads', express.static('uploads'));
 
 // Documentation website by Apidoc
-// app.use('/api', express.static('doc'));
+app.use('/api', express.static('doc'));
 
 app.use('/api', apiLimiter);
 

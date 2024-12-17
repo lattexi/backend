@@ -83,3 +83,12 @@
     - api (100 calls per 15min)
     - upload (10 uploads per 1h)
     - auth (10 login/register attempts per 1h)
+- Fixed error handler to respond only with general "Error occured" message and log error internally
+
+# Documentation
+
+- Installed apidoc globally
+- Created apidoc.json to project root
+- Added apidoc comments to all routes
+- Generated documentation with "apidoc -i src/ -o doc
+- Documentation can be found at /api
